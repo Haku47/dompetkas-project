@@ -40,7 +40,7 @@ php artisan key:generate
 php artisan migrate
 php artisan serve
 ```
-Backend akan berjalan di alamat https://127.0.0.1/8000
+Backend akan berjalan di alamat https://127.0.0.1:8000
 
 ### 2.Konfigurasi Frontend (Next.js)
 ---
