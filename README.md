@@ -40,7 +40,7 @@ php artisan key:generate
 php artisan migrate
 php artisan serve
 ```
-Frontend akan berjalan di alamat https://localhost:3000
+Backend akan berjalan di alamat https://127.0.0.1/8000
 
 ### 2.Konfigurasi Frontend (Next.js)
 ---
@@ -49,7 +49,7 @@ cd dompetkas-fe
 npm install
 npm run dev
 ```
-Backend akan berjalan di alamat https://127.0.0.1/8000
+Frontend akan berjalan di alamat https://localhost:3000
 
 ## 📝 Catatan Proyek
 Proyek ini dibuat sebagai pembelajaran implementasi integrasi Next.js Fullstack dengan Laravel API, mengedepankan efisiensi UX input data serta responsivitas layout visual.
