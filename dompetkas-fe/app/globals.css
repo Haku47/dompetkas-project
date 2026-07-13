@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+/* Konfigurasi Tema Default (Tailwind CSS v4 Style) */
+@theme {
+  --color-brand-bg: #000000;
+  --color-brand-panel: #09090b;
+  --color-brand-border: #1e1e24;
+  --color-brand-glow: rgba(255, 255, 255, 0.05);
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Reset Base Style & Responsiveness */
+@layer base {
+  body {
+    background-color: var(--color-brand-bg);
+    color: #e4e4e7;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    letter-spacing: -0.01em;
+    /* 📱 FIX MOBILE: Cegah bouncing berlebih di iOS & text size auto-scale */
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+
+  /* Kustomisasi scrollbar khusus device non-mobile (Desktop) */
+  @media (min-width: 768px) {
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 99px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+  }
+}
+
+/* Tombol & Panel Kelas Industrial Responsif Mobile & Tablet */
+@layer utilities {
+  /* Tombol Utama */
+  .btn-modern-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #ffffff;
+    color: #000000;
+    /* 📱 MOBILE FIRST: Ukuran teks dan padding menyesuaikan jempol HP */
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    width: 100%; /* Default mobile: full width */
+  }
+
+  /* 💻 TABLET & DESKTOP SCREEN UPTICK */
+  @media (min-width: 640px) {
+    .btn-modern-primary {
+      font-size: 0.875rem;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.75rem;
+      width: auto; /* Kembali ke ukuran aslinya */
+    }
+    
+    .btn-modern-primary:hover {
+      background-color: #e4e4e7;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-modern-primary:active {
+      transform: translateY(0);
+    }
+  }
+
+  /* Tombol Sekunder */
+  .btn-modern-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    color: #ffffff;
+    /* 📱 MOBILE FIRST */
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-brand-border);
+    border-radius: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    width: 100%; /* Default mobile: full width */
+  }
+
+  @media (min-width: 640px) {
+    .btn-modern-secondary {
+      font-size: 0.875rem;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.75rem;
+      width: auto;
+    }
+
+    .btn-modern-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-color: #52525b;
+      transform: translateY(-1px);
+    }
+  }
+
+  /* Panel Kartu (Glassmorphism Ringan) */
+  .glass-card {
+    background-color: var(--color-brand-panel);
+    border: 1px solid var(--color-brand-border);
+    border-radius: 0.75rem; /* Lebih condong siku di HP */
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s ease, transform 0.2s ease;
+  }
+
+  @media (min-width: 768px) {
+    .glass-card {
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+    
+    .glass-card:hover {
+      border-color: #3f3f46;
+    }
+  }
+
+  /* 📱 RESPONSIVE FIX FOR TABLES (Mencegah layout pecah di HP/Tablet) */
+  .responsive-table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
