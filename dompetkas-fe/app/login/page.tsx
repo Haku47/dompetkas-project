@@ -59,7 +59,7 @@ return (
         
         {/* Header Form */}
         <div className="space-y-1">
-            <h1 className="text-xl font-semibold text-white tracking-tight">Selamat Datang</h1>
+            <h1 className="text-xl font-semibold text-white tracking-tight justify-center">Selamat Datang</h1>
             <p className="text-xs text-neutral-400">Masuk untuk mengelola pembukuan pribadi Anda.</p>
         </div>
 

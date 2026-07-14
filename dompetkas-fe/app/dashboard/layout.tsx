@@ -73,8 +73,8 @@ export default function DashboardLayout({
             onClick={() => router.push('/dashboard')}
             className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg text-left transition-all cursor-pointer ${
               isActive('/dashboard') 
-                ? 'text-white bg-white/[0.04] border border-white/5 font-semibold' 
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.02] border border-transparent'
+                ? 'text-white bg-white/0.04 border border-white/5 font-semibold' 
+                : 'text-neutral-400 hover:text-white hover:bg-white/2 border border-transparent'
             }`}
           >
             <i className="fa-solid fa-chart-pie w-4 opacity-80"></i>
@@ -85,8 +85,8 @@ export default function DashboardLayout({
             onClick={() => router.push('/dashboard/dompet')}
             className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg text-left transition-all cursor-pointer ${
               isActive('/dashboard/dompet') 
-                ? 'text-white bg-white/[0.04] border border-white/5 font-semibold' 
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.02] border border-transparent'
+                ? 'text-white bg-white/0.04 border border-white/5 font-semibold' 
+                : 'text-neutral-400 hover:text-white hover:bg-white/2 border border-transparent'
             }`}
           >
             <i className="fa-solid fa-wallet w-4 opacity-70"></i>
@@ -97,12 +97,25 @@ export default function DashboardLayout({
             onClick={() => router.push('/dashboard/transaksi')}
             className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg text-left transition-all cursor-pointer ${
               isActive('/dashboard/transaksi') 
-                ? 'text-white bg-white/[0.04] border border-white/5 font-semibold' 
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.02] border border-transparent'
+                ? 'text-white bg-white/0.04 border border-white/5 font-semibold' 
+                : 'text-neutral-400 hover:text-white hover:bg-white/2 border border-transparent'
             }`}
           >
             <i className="fa-solid fa-list-check w-4 opacity-70"></i>
             <span>Riwayat Transaksi</span>
+          </button>
+
+          {/* ⚙️ FITUR BARU: Menu Pengaturan Terintegrasi */}
+          <button 
+            onClick={() => router.push('/dashboard/settings')}
+            className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg text-left transition-all cursor-pointer ${
+              isActive('/dashboard/settings') 
+                ? 'text-white bg-white/0.04 border border-white/5 font-semibold' 
+                : 'text-neutral-400 hover:text-white hover:bg-white/[0.02] border border-transparent'
+            }`}
+          >
+            <i className="fa-solid fa-gear w-4 opacity-70"></i>
+            <span>Pengaturan</span>
           </button>
         </nav>
       </div>

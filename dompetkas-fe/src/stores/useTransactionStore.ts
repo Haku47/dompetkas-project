@@ -1,15 +1,35 @@
 import { create } from 'zustand';
 import { Wallet, Transaction } from '@/types';
 
+interface TransactionFilter {
+  startDate?: string;
+  endDate?: string;
+}
+
+interface PaginationMeta {
+  current_page: number;
+  last_page: number;
+  total: number;
+}
+
+// Interface baru untuk cetakan objek distribusi pengeluaran
+interface DistribusiItem {
+  name: string;
+  amount: number;
+  persentase: number;
+}
+
 interface TransactionState {
   totalBalance: number;
   totalIncome: number;
   totalExpense: number;
   wallets: Wallet[];
   transactions: Transaction[];
+  trenGrafik: any[];
+  distribusiPengeluaran: DistribusiItem[]; // ⚡ FITUR BARU STATE
   isLoading: boolean;
-  fetchSummary: (token: string) => Promise<void>;
-  fetchTransactions: (token: string) => Promise<void>;
+  fetchSummary: (token: string, baseCurrency?: string) => Promise<void>;
+  fetchTransactions: (token: string, filters?: TransactionFilter, page?: number, baseCurrency?: string) => Promise<PaginationMeta | undefined>;
 }
 
 const API_URL = 'http://127.0.0.1:8000/api';
@@ -20,13 +40,14 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   totalExpense: 0,
   wallets: [],
   transactions: [],
+  trenGrafik: [],
+  distribusiPengeluaran: [], // Default array kosong
   isLoading: false,
 
-  // 1. Menarik ringkasan saldo total & grid daftar rekening
-  fetchSummary: async (token) => {
+  fetchSummary: async (token, baseCurrency = 'IDR') => {
     set({ isLoading: true });
     try {
-      const res = await fetch(`${API_URL}/dashboard/summary`, {
+      const res = await fetch(`${API_URL}/dashboard/summary?base_currency=${baseCurrency}`, {
         method: 'GET',
         headers: { 
           'Content-Type': 'application/json',
@@ -36,12 +57,13 @@ export const useTransactionStore = create<TransactionState>((set) => ({
       const json = await res.json();
       
       if (json.status === 'success') {
-        // 🛠️ FIX MAPPING: Menyelaraskan dengan struktur objek bahasa Indonesia dari backend asli lu
         set({
           totalBalance: json.data?.total_kekayaan ?? 0,
-          totalIncome: json.data?.arus_Kas?.pemasukan ?? 0, // ✨ Masuk ke objek arus_Kas
-          totalExpense: json.data?.arus_Kas?.pengeluaran ?? 0, // ✨ Masuk ke objek arus_Kas
+          totalIncome: json.data?.arus_Kas?.pemasukan ?? 0,
+          totalExpense: json.data?.arus_Kas?.pengeluaran ?? 0, 
           wallets: json.data?.daftar_dompet ?? [],
+          distribusiPengeluaran: json.data?.distribusi_pengeluaran ?? [], // ⚡ SINKRON: Langsung simpan data matang dari backend
+          trenGrafik: json.data?.tren_grafik ?? [],
         });
       }
     } catch (err) {
@@ -51,11 +73,15 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     }
   },
 
-  // 2. Menarik seluruh jurnal riwayat transaksi/mutasi kas
-  fetchTransactions: async (token) => {
+  fetchTransactions: async (token, filters, page = 1, baseCurrency = 'IDR') => {
     set({ isLoading: true });
     try {
-      const res = await fetch(`${API_URL}/transactions`, {
+      let url = `${API_URL}/transactions?page=${page}&base_currency=${baseCurrency}`;
+      if (filters?.startDate && filters?.endDate) {
+        url += `&start_date=${filters.startDate}&end_date=${filters.endDate}`;
+      }
+
+      const res = await fetch(url, {
         method: 'GET',
         headers: { 
           'Content-Type': 'application/json',
@@ -66,11 +92,13 @@ export const useTransactionStore = create<TransactionState>((set) => ({
       
       if (json.status === 'success') {
         set({ transactions: json.data });
+        return json.meta as PaginationMeta;
       }
     } catch (err) {
       console.error('Gagal memuat jurnal transaksi:', err);
     } finally {
       set({ isLoading: false });
     }
+    return undefined;
   },
 }));

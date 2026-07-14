@@ -31,6 +31,6 @@ class CategoryController extends Controller
             'budget_limit'=> $request->budget_limit
         ]);
 
-        return response()->json(['status' => 'success', 'date' => $category], 201);
+        return response()->json(['status' => 'success', 'data' => $category], 201);
     }
 }

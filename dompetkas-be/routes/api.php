@@ -15,6 +15,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     
+    // 🔴 FITUR BARU: Pemusnahan Akun dan Data Kas Selamanya
+    Route::delete('/user/terminate', [AuthController::class, 'terminateAccount']);
+    
     // Dashboard Summary
     Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
     

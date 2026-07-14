@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB; // ✨ INI DIA YANG KETINGGALAN!
+use Illuminate\Support\Facades\DB; // Sesuai import lu yang sudah aman
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -24,13 +24,9 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        // 💡 OTOMATISASI: Daftarkan kategori esensial langsung untuk user yang baru register ini
         $defaultCategories = [
-            // Kategori Pemasukan
             ['name' => 'Gaji Pokok', 'type' => 'income'],
             ['name' => 'Passive Income', 'type' => 'income'],
-
-            // Kategori Pengeluaran
             ['name' => 'Makanan & Minuman', 'type' => 'expense'],
             ['name' => 'Transportasi / Bensin', 'type' => 'expense'],
             ['name' => 'Uang Kopi / Jajan', 'type' => 'expense'],
@@ -68,7 +64,6 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        // 🛡️ FIX: "Jika user TIDAK ditemukan ATAU password TIDAK cocok"
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'error',
@@ -95,5 +90,33 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'Sesi token berhasil dihancurkan.'
         ], 200);
+    }
+
+    // 🔴 FITUR UPDATE: Pemusnahan Akun dan Data Kas Selamanya (Bebas Eror 500 Constraint)
+    public function terminateAccount(Request $request)
+    {
+        return DB::transaction(function () use ($request) {
+            $user = $request->user();
+
+            // 1. Bersihkan seluruh log mutasi jurnal kas milik user ini
+            DB::table('transactions')->where('user_id', $user->id)->delete();
+
+            // 2. Bersihkan seluruh daftar dompet rekening milik user ini
+            DB::table('wallets')->where('user_id', $user->id)->delete();
+
+            // 3. Bersihkan seluruh kategori bawaan/custom milik user ini
+            DB::table('categories')->where('user_id', $user->id)->delete();
+
+            // 4. Hancurkan seluruh sesi token Sanctum yang terdaftar
+            $user->tokens()->delete();
+
+            // 5. Terakhir, hapus entitas user utama dari database
+            $user->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Entitas akun dan seluruh jurnal data kas berhasil dimusnahkan selamanya.'
+            ], 200);
+        });
     }
 }

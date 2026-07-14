@@ -9,6 +9,7 @@ export interface Wallet {
     user_id: number;
     name: string;
     balance: number;
+    currency: string; //
     created_at: string;
     updated_at: string;
 }

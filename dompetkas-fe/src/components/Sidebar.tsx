@@ -14,8 +14,7 @@ export default function Sidebar() {
     logout();
     router.push('/login');
   };
-
-  // 🛠️ MAPPING AMAN USERNAME: Ambil nama asli dari database, fallback ke potongan email sebelum '@', baru ke kata 'User'
+  
   const displayUsername = user?.name || (user as any)?.username || user?.email?.split('@')[0] || 'User';
   const displayEmail = user?.email || 'pribadi@email.com';
   const initialLetter = displayUsername.charAt(0).toUpperCase();
@@ -69,18 +68,31 @@ export default function Sidebar() {
             <i className="fa-solid fa-list-check w-4 opacity-70"></i>
             <span>Riwayat Transaksi</span>
           </button>
+
+          {/* Menu Settings / Pengaturan Sistem */}
+          <button 
+            onClick={() => router.push('/dashboard/settings')}
+            className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg text-left transition-all cursor-pointer ${
+              isActive('/dashboard/settings') 
+                ? 'text-white bg-white/[0.04] border border-white/5 font-semibold' 
+                : 'text-neutral-400 hover:text-white hover:bg-white/[0.02] border border-transparent'
+            }`}
+          >
+            <i className="fa-solid fa-gear w-4 opacity-70"></i>
+            <span>Pengaturan</span>
+          </button>
         </nav>
       </div>
 
       {/* Info Profil Akun & Aksi Keluar */}
       <div className="p-4 border-t border-white/5 space-y-2.5">
         <div className="flex items-center gap-3 px-2 py-1">
-          {/* ✨ Lingkaran inisial huruf otomatis berubah dinamis mengikuti nama user */}
+          {/* Lingkaran inisial huruf otomatis berubah dinamis mengikuti nama user */}
           <div className="w-7 h-7 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center text-xs text-neutral-200 font-semibold uppercase">
             {initialLetter}
           </div>
           <div className="truncate">
-            {/* ✨ Menampilkan Username Asli dari Akun Logged In */}
+            {/* Menampilkan Username Asli dari Akun Logged In */}
             <p className="text-xs font-medium text-white truncate">{displayUsername}</p>
             <p className="text-[10px] text-neutral-500 truncate">{displayEmail}</p>
           </div>
